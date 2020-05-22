@@ -1,4 +1,4 @@
-package com.zhangzhigang.tb.config;
+package com.zhangzhigang.tm.config;
 
 import java.time.Duration;
 

@@ -1,4 +1,4 @@
-package com.zhangzhigang.tb.config;
+package com.zhangzhigang.tm.config;
 
 
 import org.slf4j.Logger;

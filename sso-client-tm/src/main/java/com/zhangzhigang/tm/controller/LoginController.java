@@ -1,4 +1,4 @@
-package com.zhangzhigang.tb.controller;
+package com.zhangzhigang.tm.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

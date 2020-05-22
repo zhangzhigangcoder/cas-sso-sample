@@ -12,8 +12,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.zhangzhigang.tm.TMApplication;
+
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = TBApplication.class)
+@SpringBootTest(classes = TMApplication.class)
 public class RedisTest {
 	
 	@Autowired

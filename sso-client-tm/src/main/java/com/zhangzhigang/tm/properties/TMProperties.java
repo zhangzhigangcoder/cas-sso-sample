@@ -1,4 +1,4 @@
-package com.zhangzhigang.tb.properties;
+package com.zhangzhigang.tm.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

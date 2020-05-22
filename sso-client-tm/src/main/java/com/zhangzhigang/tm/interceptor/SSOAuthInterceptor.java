@@ -1,4 +1,4 @@
-package com.zhangzhigang.tb.interceptor;
+package com.zhangzhigang.tm.interceptor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,10 +10,10 @@ import javax.servlet.http.HttpSession;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import com.zhangzhigang.tb.config.SpringContextHolder;
-import com.zhangzhigang.tb.properties.TMProperties;
-import com.zhangzhigang.tb.utils.HttpClientUtil;
-import com.zhangzhigang.tb.utils.SSOClientUtil;
+import com.zhangzhigang.tm.config.SpringContextHolder;
+import com.zhangzhigang.tm.properties.TMProperties;
+import com.zhangzhigang.tm.utils.HttpClientUtil;
+import com.zhangzhigang.tm.utils.SSOClientUtil;
 
 public class SSOAuthInterceptor implements HandlerInterceptor {
 	

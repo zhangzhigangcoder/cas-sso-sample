@@ -1,12 +1,12 @@
-package com.zhangzhigang.tb.utils;
+package com.zhangzhigang.tm.utils;
 
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.zhangzhigang.tb.config.SpringContextHolder;
-import com.zhangzhigang.tb.properties.TMProperties;
+import com.zhangzhigang.tm.config.SpringContextHolder;
+import com.zhangzhigang.tm.properties.TMProperties;
 
 public class SSOClientUtil {
 	

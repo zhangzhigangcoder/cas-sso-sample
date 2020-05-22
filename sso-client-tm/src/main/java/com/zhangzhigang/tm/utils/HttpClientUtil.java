@@ -1,4 +1,4 @@
-package com.zhangzhigang.tb.utils;
+package com.zhangzhigang.tm.utils;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;

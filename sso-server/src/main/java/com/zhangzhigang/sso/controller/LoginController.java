@@ -61,7 +61,8 @@ public class LoginController {
 			session.setAttribute("token", token);
 			// 4. 返回给客户端
 			model.addAttribute("token", token);
-			return "redirect:" + redirectUrl  + "?token=" + token;
+			return "redirect:" + redirectUrl;
+//			return "redirect:" + redirectUrl  + "?token=" + token;
 		}
 		// 登录失败
 		System.out.println("用户账号错误");
@@ -88,7 +89,7 @@ public class LoginController {
 		} else {
 			// 已登录，返回之前页面
 			model.addAttribute("token", token);
-			return "redirect:" + redirectUrl + "?token=" + token;
+			return "redirect:" + redirectUrl;
 		}
 	}
 	

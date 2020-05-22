@@ -1,4 +1,4 @@
-package com.zhangzhigang.tb.entity;
+package com.zhangzhigang.tm.entity;
 
 /**
  * 账号信息
