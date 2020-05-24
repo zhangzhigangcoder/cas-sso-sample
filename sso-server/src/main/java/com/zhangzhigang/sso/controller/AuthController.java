@@ -1,9 +1,10 @@
 package com.zhangzhigang.sso.controller;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpSession;
 
@@ -16,18 +17,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.zhangzhigang.sso.config.SSOContext;
+import com.zhangzhigang.sso.entity.ClientInfo;
+
 @SuppressWarnings("unchecked")
 @Controller
-public class LoginController {
+public class AuthController {
 	
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
 	
-	public static final String SSO_PREFIX = "token:";
-	
-	@GetMapping("/index")
-	public String index() {
-		return "index";
+	@GetMapping
+	public String index(HttpSession session, Model model) {
+		String token = (String) session.getAttribute("token");
+		if (StringUtils.isEmpty(token)) {
+			// 未登录，跳转登录页面
+			model.addAttribute("redirectUrl", "");
+			return "login";
+		} 
+		return "success";
 	}
 	
 	@GetMapping("/login")
@@ -56,13 +64,16 @@ public class LoginController {
 			// 2. 记录登录token, 表明该账号登录过
 			Map<String, String> account = new HashMap<String, String>();
 			account.put("username", username);
-			redisTemplate.opsForValue().set(SSO_PREFIX + token, account, 60, TimeUnit.SECONDS);
+			// 默认这里是永不过期的
+			redisTemplate.opsForValue().set(SSOContext.SSO_PREFIX + token, account);
+//			redisTemplate.opsForValue().set(SSO_PREFIX + token, account, 24 * 60 * 60, TimeUnit.SECONDS);
 			// 3. 服务器中存储会话信息
 			session.setAttribute("token", token);
 			// 4. 返回给客户端
-			model.addAttribute("token", token);
-			return "redirect:" + redirectUrl;
-//			return "redirect:" + redirectUrl  + "?token=" + token;
+			if (StringUtils.isEmpty(redirectUrl)) {
+				return "success";
+			}
+			return "redirect:" + redirectUrl+ "?token=" + token;
 		}
 		// 登录失败
 		System.out.println("用户账号错误");
@@ -86,11 +97,9 @@ public class LoginController {
 			// 未登录，跳转登录页面
 			model.addAttribute("redirectUrl", redirectUrl);
 			return "login";
-		} else {
-			// 已登录，返回之前页面
-			model.addAttribute("token", token);
-			return "redirect:" + redirectUrl;
-		}
+		} 
+		// 已登录，返回之前页面
+		return "redirect:" + redirectUrl + "?token=" + token;
 	}
 	
 	/**
@@ -98,19 +107,31 @@ public class LoginController {
 	 * @param token
 	 * @return
 	 */
-	@PostMapping("/verify")
+	@PostMapping("/auth")
 	@ResponseBody
-	public Map<String, String> verify(String token, HttpSession session) {
+	public Map<String, String> verify(String token, String clientLogoutUrl, String jsessionId) {
 		System.out.println("verify token: " + token);
 		if (!StringUtils.isEmpty(token)) {
-			Map<String, String> account = (HashMap<String, String>) redisTemplate.opsForValue().get(SSO_PREFIX + token);
+			Map<String, String> account = (HashMap<String, String>) redisTemplate.opsForValue().get(SSOContext.SSO_PREFIX + token);
 			System.out.println(account);
-			if (null == account) {
-				session.removeAttribute("token");
+			if (null != account) {
+				Set<ClientInfo> clientList = SSOContext.CLIENT_LOGOUT_URLS.get(token);
+				if (null == clientList) {
+					clientList = new HashSet<>();
+					SSOContext.CLIENT_LOGOUT_URLS.put(token, clientList);
+				}
+				clientList.add(new ClientInfo(clientLogoutUrl, jsessionId));
 			}
 			return account;
 		}
 		return null;
+	}
+	
+	@GetMapping("/logOut")
+	public String logOut(HttpSession session, Model model, String redirectUrl) {
+		session.invalidate();
+		model.addAttribute("redirectUrl", redirectUrl);
+		return "redirect:"+redirectUrl;
 	}
 	
 }

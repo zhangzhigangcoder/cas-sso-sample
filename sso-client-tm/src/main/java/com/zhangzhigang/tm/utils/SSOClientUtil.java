@@ -23,6 +23,13 @@ public class SSOClientUtil {
 		response.sendRedirect(url.toString());
 	}
 	
+	public static void appendLogOutUrl(HttpServletRequest request) {
+		StringBuilder logoutUrl = new StringBuilder()
+				.append(getSsoServerLogOutUrl())
+				.append("?redirectUrl=")
+				.append(getRedirectUrl(request));
+		request.setAttribute("logoutUrl", logoutUrl.toString());
+	}
 	
 	/**
 	 * 获取请求地址
@@ -43,6 +50,17 @@ public class SSOClientUtil {
 	 */
 	public static String getSsoServerLogOutUrl() {
 		return getTBProperties().getSsoServerUrlPrefix() + "/logOut";
+	}
+	
+	public static String getSsoServerAuthUrl() {
+		return getTBProperties().getSsoServerUrlPrefix() + "/auth";
+	}
+	
+	/**
+	 * 获取客户端地址
+	 */
+	public static String getClientUrl() {
+		return getTBProperties().getClientHostUrl();
 	}
 	
 	public static TMProperties getTBProperties() {

@@ -5,6 +5,6 @@
 </head>
 <body>
 	<span>用户名 admin</span>
-	<a href="">退出</a>
+	<a href="${Request['logoutUrl']}">退出</a>
 </body>
 </html>

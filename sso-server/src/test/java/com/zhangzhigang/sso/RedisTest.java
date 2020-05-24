@@ -9,7 +9,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = SsoServerApplication.class)
+@SpringBootTest(classes = SSOApplication.class)
 public class RedisTest {
 	
 	@Autowired

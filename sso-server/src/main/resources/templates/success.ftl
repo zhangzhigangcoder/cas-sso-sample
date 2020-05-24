@@ -4,6 +4,6 @@
 	<title>认证中心</title>
 </head>
 <body>
-	<h3>${username} 登录成功</h3>
+	<h3>登录成功</h3>
 </body>
 </html>
