@@ -1,11 +1,14 @@
 package com.zhangzhigang.sso.listener;
 
+import java.util.Base64;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -19,14 +22,12 @@ import com.zhangzhigang.sso.utils.HttpClientUtil;
  * 
  * @author zhangzhigang
  */
+@Configuration
 public class SSOHttpSessionListener implements HttpSessionListener {
 	
+	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
 	
-	public SSOHttpSessionListener(RedisTemplate<String, Object> redisTemplate) {
-		this.redisTemplate = redisTemplate;
-	}
-
 	@Override
 	public void sessionDestroyed(HttpSessionEvent se) {
 		HttpSession session = se.getSession();

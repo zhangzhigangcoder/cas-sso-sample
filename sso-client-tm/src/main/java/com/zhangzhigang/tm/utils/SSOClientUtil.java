@@ -25,7 +25,7 @@ public class SSOClientUtil {
 	
 	public static void appendLogOutUrl(HttpServletRequest request) {
 		StringBuilder logoutUrl = new StringBuilder()
-				.append(getSsoServerLogOutUrl())
+				.append(getClientLogOutUrl())
 				.append("?redirectUrl=")
 				.append(getRedirectUrl(request));
 		request.setAttribute("logoutUrl", logoutUrl.toString());

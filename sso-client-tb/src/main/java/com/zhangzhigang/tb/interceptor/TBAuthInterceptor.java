@@ -10,18 +10,24 @@ import javax.servlet.http.HttpSession;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.zhangzhigang.tb.entity.Account;
 import com.zhangzhigang.tb.utils.HttpClientUtil;
 import com.zhangzhigang.tb.utils.SSOClientUtil;
 
 public class TBAuthInterceptor implements HandlerInterceptor {
+	
+	// 登录账号
+	public static final String ACCOUNT = "username";
 	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		// 1. 判断本地是否存在会话(isLogin=true)
 		HttpSession session = request.getSession();
-		Boolean isLogin = (Boolean) session.getAttribute("isLogin");
-		if (null != isLogin && isLogin) {
+		Object account = session.getAttribute("account");
+		if (null != account) {
 			SSOClientUtil.appendLogOutUrl(request);
 			return true;
 		}
@@ -38,7 +44,9 @@ public class TBAuthInterceptor implements HandlerInterceptor {
 			String result = HttpClientUtil.post(url, params);
 			if (!StringUtils.isEmpty(result)) {
 				System.out.println("认证中心校验通过:" + result);
-				session.setAttribute("isLogin", true);
+				JSONObject json = JSON.parseObject(result);
+				account = new Account(json.getString(ACCOUNT));
+				session.setAttribute("account", account);
 				SSOClientUtil.appendLogOutUrl(request);
 				return true;
 			}

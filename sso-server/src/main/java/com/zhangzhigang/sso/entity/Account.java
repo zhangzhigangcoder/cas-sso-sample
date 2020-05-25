@@ -1,12 +1,16 @@
 package com.zhangzhigang.sso.entity;
 
+import java.io.Serializable;
+
 /**
  * 账号信息
  * 
  * @author zhangzhigang
  */
-public class Account {
-
+public class Account implements Serializable {
+	
+	private static final long serialVersionUID = 7587234996695487155L;
+	
 	private String username;
 
 	public String getUsername() {

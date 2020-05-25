@@ -25,6 +25,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -163,7 +164,9 @@ public abstract class HttpClientUtil {
     	HttpURLConnection  conn = (HttpURLConnection) url.openConnection();
     	conn.setRequestMethod("POST");
     	conn.setDoOutput(true);
-    	conn.addRequestProperty("Cookie", "JSESSIONID=" + jsessionId);
+    	byte[] encodedCookieBytes = Base64.getEncoder().encode(jsessionId.getBytes());
+    	jsessionId =  new String(encodedCookieBytes);
+    	conn.addRequestProperty("Cookie", "SESSION=" + jsessionId);
     	conn.connect();
     	conn.getInputStream();
     	conn.disconnect();

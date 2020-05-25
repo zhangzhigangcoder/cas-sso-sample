@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,20 @@ public class AuthController {
 	
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
+
+	@ResponseBody
+	@GetMapping("/sessionId")
+	public String getSessionId(HttpServletRequest request, HttpSession session) {
+		String uid = null;
+		if (request.getSession().getAttribute("uid") != null) {
+			uid = request.getSession().getAttribute("uid").toString();
+		}else {
+			uid = UUID.randomUUID().toString();
+		}
+		request.getSession().setAttribute("uid", uid);
+		System.out.println(session.getId());
+		return request.getSession().getId();
+	}
 	
 	@GetMapping
 	public String index(HttpSession session, Model model) {
@@ -39,7 +54,8 @@ public class AuthController {
 	}
 	
 	@GetMapping("/login")
-	public String login() {
+	public String login(Model model) {
+		model.addAttribute("redirectUrl","");
 		return "login";
 	}
 	
@@ -56,17 +72,17 @@ public class AuthController {
 	public String doLogin(Model model, String username, String password, String redirectUrl, HttpSession session) {
 		System.out.println(String.format("username=%s, password=%s", username, password));
 		// 实际从DB判断
-		if ("admin".equals(username) && "123456".equals(password)) {
+		String dbPass = SSOContext.ACCOUNT_MOCK.get(username);
+		if (!StringUtils.isEmpty(dbPass) && dbPass.equals(password)) {
 			// 登录成功
 			// 1. 生成一个令牌
 			String token = UUID.randomUUID().toString();
 			System.out.println("生成token成功=>" +token);
 			// 2. 记录登录token, 表明该账号登录过
 			Map<String, String> account = new HashMap<String, String>();
-			account.put("username", username);
+			account.put(SSOContext.SSO_ACCOUNT, username);
 			// 默认这里是永不过期的
 			redisTemplate.opsForValue().set(SSOContext.SSO_PREFIX + token, account);
-//			redisTemplate.opsForValue().set(SSO_PREFIX + token, account, 24 * 60 * 60, TimeUnit.SECONDS);
 			// 3. 服务器中存储会话信息
 			session.setAttribute("token", token);
 			// 4. 返回给客户端

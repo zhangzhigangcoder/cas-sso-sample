@@ -4,7 +4,7 @@
 	<title>天猫</title>
 </head>
 <body>
-	<span>用户名 admin</span>
+	<span>欢迎 ${(account.username)!''}访问</span>
 	<a href="${Request['logoutUrl']}">退出</a>
 </body>
 </html>
