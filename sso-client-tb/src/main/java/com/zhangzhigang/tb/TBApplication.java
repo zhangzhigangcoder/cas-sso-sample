@@ -7,7 +7,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 
 import com.zhangzhigang.tb.properties.TBProperties;
 
-@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 60 * 60, redisNamespace = "TB_SESSION")
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 24 * 60 * 60, redisNamespace = "TB_SESSION")
 @EnableConfigurationProperties({TBProperties.class})
 @SpringBootApplication
 public class TBApplication {

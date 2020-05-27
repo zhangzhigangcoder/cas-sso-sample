@@ -1,6 +1,8 @@
 package com.zhangzhigang.tm.utils;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -54,6 +56,18 @@ public class SSOClientUtil {
 	
 	public static String getSsoServerAuthUrl() {
 		return getTBProperties().getSsoServerUrlPrefix() + "/auth";
+	}
+	
+	/**
+	 * 验证token
+	 */
+	public static String authenticate(String token, String sessionId) {
+		String url = SSOClientUtil.getSsoServerAuthUrl();
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("token", token);
+		params.put("jsessionId", sessionId);
+		params.put("clientLogoutUrl", SSOClientUtil.getClientLogOutUrl());
+		return HttpClientUtil.post(url, params);
 	}
 	
 	/**
