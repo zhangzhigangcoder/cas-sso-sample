@@ -3,7 +3,7 @@ server:
   servlet:
     session:
 #       Session timeout. If a duration suffix is not specified, seconds is used
-      timeout: 86400 # 24 * 60 * 60
+#      timeout: 86400 # 24 * 60 * 60
       cookie:
         name: sts # 配置cookie名称
         
@@ -35,6 +35,8 @@ spring:
     expose-session-attributes: true
     request-context-attribute: request
     suffix: .ftl
+    
+   ######## spring session configuration #######
 #  session:
     # Session store type
 #    store-type: redis
